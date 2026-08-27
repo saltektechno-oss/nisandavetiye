@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="340" viewBox="0 0 420 340" role="img" aria-label="İki altın nişan yüzüğü">
+  <defs>
+    <!-- Altın metal: parlak tepeler + koyu gölge bantları -->
+    <linearGradient id="g1" x1="0.05" y1="0" x2="0.95" y2="1">
+      <stop offset="0%"   stop-color="#8A6417"/>
+      <stop offset="12%"  stop-color="#D9B44A"/>
+      <stop offset="26%"  stop-color="#FBF0C0"/>
+      <stop offset="40%"  stop-color="#E2B84E"/>
+      <stop offset="56%"  stop-color="#9C7420"/>
+      <stop offset="72%"  stop-color="#F0D68C"/>
+      <stop offset="88%"  stop-color="#C79A33"/>
+      <stop offset="100%" stop-color="#7E5A14"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0.9" y1="0" x2="0.1" y2="1">
+      <stop offset="0%"   stop-color="#7E5A14"/>
+      <stop offset="14%"  stop-color="#E0BB57"/>
+      <stop offset="30%"  stop-color="#FFF7D6"/>
+      <stop offset="44%"  stop-color="#E8C264"/>
+      <stop offset="60%"  stop-color="#A87D22"/>
+      <stop offset="76%"  stop-color="#F4DE9E"/>
+      <stop offset="90%"  stop-color="#C99C35"/>
+      <stop offset="100%" stop-color="#6F4E10"/>
+    </linearGradient>
+    <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3B312A" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#3B312A" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+
+    <!-- Arka halkanın, ön halkanın arkasından geçen kısmını gizlemek için -->
+    <mask id="behind">
+      <rect width="420" height="340" fill="#fff"/>
+      <g transform="rotate(14 250 190)">
+        <path d="M 146,190 a 104,116 0 1,0 208,0 a 104,116 0 1,0 -208,0 Z M 173,190 a 77,89 0 1,0 154,0 a 77,89 0 1,0 -154,0 Z" fill-rule="evenodd" fill="#000"/>
+      </g>
+    </mask>
+    <!-- Arka halkanın ÖNDEN geçtiği parça.
+         Kesim sınırı ön halkanın bandının içine denk gelsin diye iki
+         kırpma iç içe kullanılır: önce ön bandın şekli, sonra üst bölge.
+         Böylece kesik kenar bandın kendi kenarıyla çakışır, görünmez. -->
+    <clipPath id="frontBand">
+      <g transform="rotate(14 250 190)">
+        <path d="M 146,190 a 104,116 0 1,0 208,0 a 104,116 0 1,0 -208,0 Z M 173,190 a 77,89 0 1,0 154,0 a 77,89 0 1,0 -154,0 Z" clip-rule="evenodd"/>
+      </g>
+    </clipPath>
+    <clipPath id="topZone">
+      <rect x="0" y="0" width="420" height="168"/>
+    </clipPath>
+  </defs>
+
+  <!-- zemin gölgesi -->
+  <ellipse cx="212" cy="300" rx="120" ry="17" fill="url(#shadow)" filter="url(#soft)"/>
+
+  <!-- ARKA HALKA (sol, hafif geriye yatık) -->
+  <g mask="url(#behind)">
+    <g transform="rotate(-16 172 150)">
+      <path d="M 72,150 a 100,112 0 1,0 200,0 a 100,112 0 1,0 -200,0 Z M 97,150 a 75,87 0 1,0 150,0 a 75,87 0 1,0 -150,0 Z" fill-rule="evenodd" fill="url(#g1)"/>
+      <path d="M 72,150 a 100,112 0 1,0 200,0 a 100,112 0 1,0 -200,0 Z M 97,150 a 75,87 0 1,0 150,0 a 75,87 0 1,0 -150,0 Z" fill-rule="evenodd" fill="none"
+            stroke="#FFF9E4" stroke-width="1.1" opacity="0.45"/>
+    </g>
+  </g>
+
+  <!-- ÖN HALKA (sağ) -->
+  <g transform="rotate(14 250 190)">
+    <path d="M 146,190 a 104,116 0 1,0 208,0 a 104,116 0 1,0 -208,0 Z M 173,190 a 77,89 0 1,0 154,0 a 77,89 0 1,0 -154,0 Z" fill-rule="evenodd" fill="url(#g2)"/>
+    <path d="M 146,190 a 104,116 0 1,0 208,0 a 104,116 0 1,0 -208,0 Z M 173,190 a 77,89 0 1,0 154,0 a 77,89 0 1,0 -154,0 Z" fill-rule="evenodd" fill="none"
+          stroke="#FFFBEC" stroke-width="1.2" opacity="0.5"/>
+  </g>
+
+  <!-- Arka halkanın ön halkanın ÜSTÜNDEN geçtiği parça: iç içe geçme hissi -->
+  <g clip-path="url(#frontBand)">
+   <g clip-path="url(#topZone)">
+    <g transform="rotate(-16 172 150)">
+      <path d="M 72,150 a 100,112 0 1,0 200,0 a 100,112 0 1,0 -200,0 Z M 97,150 a 75,87 0 1,0 150,0 a 75,87 0 1,0 -150,0 Z" fill-rule="evenodd" fill="url(#g1)"/>
+      <path d="M 72,150 a 100,112 0 1,0 200,0 a 100,112 0 1,0 -200,0 Z M 97,150 a 75,87 0 1,0 150,0 a 75,87 0 1,0 -150,0 Z" fill-rule="evenodd" fill="none"
+            stroke="#FFF9E4" stroke-width="1.1" opacity="0.45"/>
+    </g>
+   </g>
+  </g>
+</svg>

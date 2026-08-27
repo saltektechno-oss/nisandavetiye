@@ -1,0 +1,449 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   TASARIM JETONLARI (design tokens)
+   Renkleri değiştirmek istersen sadece burayı düzenle.
+   =========================================================================== */
+@theme {
+  /* Zemin katmanları — sıcak, kâğıt hissi veren fildişi tonları */
+  --color-ivory: #fbf8f2;
+  --color-parchment: #f5eee1;
+  --color-linen: #efe5d3;
+  --color-surface: #fffdf8;
+
+  /* Altın — düz sarı değil, şampanya→antik altın geçişi */
+  --color-gold: #be9b57;
+  --color-gold-deep: #a07a3c;
+  --color-gold-light: #e0c795;
+  --color-gold-pale: #f0e3c8;
+
+  /* İkincil vurgular */
+  --color-blush: #d8b9b2;
+  --color-sage: #9ba88c;
+
+  /* Metin */
+  --color-ink: #3b312a;
+  --color-ink-soft: #5c4f43;
+  --color-muted: #8a7a69;
+
+  /* Tipografi */
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-body: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-label: var(--font-jost), "Jost", ui-sans-serif, system-ui, sans-serif;
+
+  /* Yumuşak gölgeler */
+  --shadow-card: 0 1px 2px rgba(59, 49, 42, 0.04), 0 12px 32px -12px rgba(59, 49, 42, 0.16);
+  --shadow-lift: 0 2px 4px rgba(59, 49, 42, 0.05), 0 24px 48px -20px rgba(59, 49, 42, 0.28);
+  --shadow-gold: 0 10px 24px -10px rgba(160, 122, 60, 0.55);
+
+  /* Animasyon eğrileri */
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-door: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ===========================================================================
+   TEMEL
+   =========================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* Sayı hizalaması geri sayımda zıplamayı engeller */
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  ::selection {
+    background: var(--color-gold-pale);
+    color: var(--color-ink);
+  }
+
+  /* Klavye ile gezenler için görünür odak halkası */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Hareket hassasiyeti olan kullanıcılar için tüm animasyonlar kısılır */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ===========================================================================
+   YARDIMCI SINIFLAR
+   =========================================================================== */
+@layer components {
+  /* İnce, harf aralıklı küçük büyük-harf etiketler (bölüm başlıkları) */
+  .label-caps {
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+  }
+
+  /* Kâğıt dokusu — çok hafif bir gren, ekranda "basılı" hissi verir */
+  .paper {
+    position: relative;
+    isolation: isolate;
+  }
+  .paper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  }
+
+  /* Altın kalem çizgisi — bölüm ayırıcılarda kullanılır */
+  .hairline {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-gold) 65%, transparent) 22%,
+      var(--color-gold) 50%,
+      color-mix(in srgb, var(--color-gold) 65%, transparent) 78%,
+      transparent
+    );
+  }
+
+  /* Altın dolgulu buton */
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background-image: linear-gradient(
+      135deg,
+      var(--color-gold-light) 0%,
+      var(--color-gold) 45%,
+      var(--color-gold-deep) 100%
+    );
+    color: #fffdf8;
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-gold);
+    transition:
+      transform 0.35s var(--ease-silk),
+      filter 0.35s var(--ease-silk),
+      box-shadow 0.35s var(--ease-silk);
+  }
+  .btn-gold:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+  .btn-gold:active {
+    transform: translateY(0);
+  }
+
+  /* Çerçevesi altın, içi krem ikincil buton */
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 45%, transparent);
+    background: var(--color-surface);
+    color: var(--color-ink-soft);
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition:
+      border-color 0.35s var(--ease-silk),
+      background 0.35s var(--ease-silk),
+      transform 0.35s var(--ease-silk);
+  }
+  .btn-outline:hover {
+    border-color: var(--color-gold);
+    background: var(--color-gold-pale);
+    transform: translateY(-1px);
+  }
+
+  /* Kart yüzeyi */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 28%, transparent);
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Form alanları */
+  .field {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 32%, transparent);
+    background: color-mix(in srgb, var(--color-parchment) 55%, white);
+    padding: 0.8rem 1rem;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    color: var(--color-ink);
+    transition:
+      border-color 0.3s var(--ease-silk),
+      box-shadow 0.3s var(--ease-silk),
+      background 0.3s var(--ease-silk);
+  }
+  .field::placeholder {
+    color: color-mix(in srgb, var(--color-muted) 75%, transparent);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 16%, transparent);
+  }
+}
+
+/* ===========================================================================
+   ANAHTAR KARELER
+   =========================================================================== */
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-3.5deg) translateY(0);
+  }
+  50% {
+    transform: rotate(3.5deg) translateY(-5px);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -180% 0;
+  }
+  100% {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.55;
+  }
+  90% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-115vh) translateX(var(--drift-x, 24px)) rotate(220deg);
+    opacity: 0;
+  }
+}
+
+/* Yüzükler havada süzülür: yavaş yükselip alçalır, hafifçe salınır */
+@keyframes floatRings {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1.2deg);
+  }
+}
+
+/* Yerdeki gölge, yüzük yükseldikçe küçülüp soluklaşır */
+@keyframes floatShadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.28;
+  }
+  50% {
+    transform: scaleX(0.82);
+    opacity: 0.14;
+  }
+}
+
+.float-rings {
+  animation: floatRings 5.5s ease-in-out infinite;
+}
+.float-shadow {
+  animation: floatShadow 5.5s ease-in-out infinite;
+}
+
+/* Parıltılar: yavaşça belirip sönen dört köşeli yıldızlar */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.35) rotate(0deg);
+  }
+  50% {
+    opacity: var(--peak, 0.5);
+    transform: scale(1) rotate(45deg);
+  }
+}
+
+/* Kapak açılırken merkezden dağılan tek seferlik parıltı yağmuru */
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 0), var(--ty, 0)) scale(1.15) rotate(160deg);
+  }
+}
+
+.animate-sway {
+  animation: sway 4s var(--ease-silk) infinite;
+}
+.animate-breathe {
+  animation: breathe 2.6s ease-in-out infinite;
+}
+
+/* Altın parıltı geçen metin (kapaktaki isimler) */
+.shimmer-text {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-deep) 0%,
+    var(--color-gold) 35%,
+    #f6e6c4 50%,
+    var(--color-gold) 65%,
+    var(--color-gold-deep) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+
+/* Sayfa boyunca süzülen minik altın zerreler */
+.mote {
+  position: absolute;
+  bottom: -10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--color-gold-light);
+  animation: drift linear infinite;
+  pointer-events: none;
+}
+
+/* Galeri fotoğrafları çok yavaş yakınlaşıp uzaklaşır — durağan
+   görseller bile canlı durur. Kartlar sırayla farklı yönde başlar. */
+@keyframes kenburns {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.09) translate3d(var(--kb-x, -1%), var(--kb-y, -1.5%), 0);
+  }
+}
+
+.kenburns {
+  animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+/* Sabit ışıltı katmanı — aşağı inildikçe animasyon kesintisiz sürer */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  width: var(--size, 10px);
+  height: var(--size, 10px);
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    #fbf0d8 0%,
+    var(--color-gold-light) 35%,
+    color-mix(in srgb, var(--color-gold) 35%, transparent) 60%,
+    transparent 72%
+  );
+  clip-path: polygon(
+    50% 0%,
+    60% 40%,
+    100% 50%,
+    60% 60%,
+    50% 100%,
+    40% 60%,
+    0% 50%,
+    40% 40%
+  );
+  animation: twinkle var(--dur, 5s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.spark--burst {
+  animation: pop 1.7s var(--ease-silk) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Kapak paneli kâğıt dokusu (noktalı + eğik tarama) */
+.cover-panel {
+  background-color: var(--color-parchment);
+  background-image:
+    radial-gradient(rgba(190, 155, 87, 0.2) 1.3px, transparent 1.5px),
+    radial-gradient(rgba(190, 155, 87, 0.2) 1.3px, transparent 1.5px),
+    repeating-linear-gradient(45deg, rgba(190, 155, 87, 0.05) 0 1px, transparent 1px 22px);
+  background-size:
+    28px 28px,
+    28px 28px,
+    auto;
+  background-position:
+    0 0,
+    14px 14px,
+    0 0;
+}
+
+/* Sayfa kilidi — kapak açılana kadar arka plan kaymasın */
+body[data-locked="true"] {
+  overflow: hidden;
+  touch-action: none;
+}
