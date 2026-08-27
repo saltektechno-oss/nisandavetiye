@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { siteConfig } from "@/lib/site.config";
 import { SealRing } from "./ui/Ornaments";
+import { RingsArt } from "./ui/RingsArt";
 
 const EASE = [0.65, 0, 0.35, 1] as const;
 
@@ -109,15 +110,19 @@ export function Cover({
 
               {/* Yüzükler: çerçevesiz, havada süzülür */}
               <span className={`relative block w-[132px] ${reduce ? "" : "float-rings"}`}>
-                <Image
-                  src={siteConfig.cover.photo ?? "/images/rings.svg"}
-                  alt="İki altın nişan yüzüğü"
-                  width={420}
-                  height={340}
-                  sizes="132px"
-                  priority
-                  className="h-auto w-full drop-shadow-[0_14px_22px_rgba(59,49,42,0.28)]"
-                />
+                {siteConfig.cover.photo ? (
+                  <Image
+                    src={siteConfig.cover.photo}
+                    alt="Nişan yüzüğü"
+                    width={420}
+                    height={340}
+                    sizes="132px"
+                    priority
+                    className="h-auto w-full drop-shadow-[0_14px_22px_rgba(59,49,42,0.28)]"
+                  />
+                ) : (
+                  <RingsArt className="h-auto w-full drop-shadow-[0_14px_22px_rgba(59,49,42,0.28)]" />
+                )}
               </span>
             </motion.span>
 
