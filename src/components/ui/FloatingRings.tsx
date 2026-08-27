@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { siteConfig } from "@/lib/site.config";
 import { RingsArt } from "./RingsArt";
 
 /**
@@ -28,7 +30,18 @@ export function FloatingRings({
       transition={{ duration: reduce ? 0.3 : 1.1, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className={reduce ? "" : "float-rings"}>
-        <RingsArt className="h-auto w-full drop-shadow-[0_18px_26px_rgba(59,49,42,0.18)]" />
+        {siteConfig.rings.photo ? (
+          <Image
+            src={siteConfig.rings.photo}
+            alt="İki altın nişan yüzüğü"
+            width={1000}
+            height={810}
+            priority
+            className="h-auto w-full drop-shadow-[0_18px_26px_rgba(59,49,42,0.18)]"
+          />
+        ) : (
+          <RingsArt className="h-auto w-full drop-shadow-[0_18px_26px_rgba(59,49,42,0.18)]" />
+        )}
       </div>
 
       {/* Yerdeki gölge — yüzük yükseldikçe küçülür */}

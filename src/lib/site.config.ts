@@ -78,11 +78,23 @@ export const siteConfig = {
     ],
   },
 
-  /* --- KAPAK (davetiye açılış ekranı) ------------------------------------
-     Kapakta çizim bir yüzük ikonu gösterilir. Fotoğraf kullanmak istersen
-     dosyayı /public/images/ring.jpg olarak koyup yolunu buraya yaz.       */
-  cover: {
+  /* --- YÜZÜK GÖRSELİ -----------------------------------------------------
+     Hem kapakta hem de ayetin altında kullanılan yüzükler.
+
+     Kendi fotoğrafını kullanmak için:
+       1) Arka planı silinmiş (şeffaf) PNG'yi şuraya koy:
+          public/images/ring.png
+       2) Aşağıdaki satırı şöyle yap:
+          photo: "/images/ring.png",
+
+     null bırakırsan koda gömülü vektör çizim kullanılır (dosya indirilmez,
+     anında görünür). Her iki durumda da havada süzülme animasyonu aynıdır. */
+  rings: {
     photo: null as string | null,
+  },
+
+  /* --- KAPAK (davetiye açılış ekranı) ------------------------------------ */
+  cover: {
     hint: "Davetiyeyi açmak için dokunun",
   },
 
