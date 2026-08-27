@@ -81,16 +81,17 @@ export const siteConfig = {
   /* --- YÜZÜK GÖRSELİ -----------------------------------------------------
      Hem kapakta hem de ayetin altında kullanılan yüzükler.
 
-     Kendi fotoğrafını kullanmak için:
-       1) Arka planı silinmiş (şeffaf) PNG'yi şuraya koy:
-          public/images/ring.png
-       2) Aşağıdaki satırı şöyle yap:
-          photo: "/images/ring.png",
+     Yol zaten bağlı: arka planı silinmiş (şeffaf) PNG'yi
+        public/images/ring.png
+     olarak koyman yeterli — kod değiştirmene gerek yok.
 
-     null bırakırsan koda gömülü vektör çizim kullanılır (dosya indirilmez,
-     anında görünür). Her iki durumda da havada süzülme animasyonu aynıdır. */
+     Dosya yoksa veya yüklenemezse site sessizce koda gömülü vektör çizime
+     düşer, hiçbir zaman kırık görsel göstermez. Süzülme animasyonu ve
+     gölge her iki durumda da aynı çalışır.
+
+     Çizimi tercih edersen: photo: null                                    */
   rings: {
-    photo: null as string | null,
+    photo: "/images/ring.png" as string | null,
   },
 
   /* --- KAPAK (davetiye açılış ekranı) ------------------------------------ */
