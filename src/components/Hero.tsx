@@ -19,10 +19,14 @@ export function Hero({ ready }: { ready: boolean }) {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "38%"]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const ornamentY = useTransform(scrollYProgress, [0, 1], ["0%", "-22%"]);
-  const sprigY = useTransform(scrollYProgress, [0, 1], ["0%", "62%"]);
+  /* Metin ekranda dururken asla solmamalı: solma ancak bölüm gerçekten
+     yukarı çıkarken (ilerlemenin %70'inden sonra) başlar. */
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 1, 0]);
+  const ornamentY = useTransform(scrollYProgress, [0, 1], ["0%", "-14%"]);
+  const sprigY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  /* Kaydırma başlar başlamaz ipucu çekilsin; metnin üstüne binmesin */
+  const cueOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
 
   /** Sıralı giriş: her eleman bir öncekinden 0.12sn sonra belirir */
   const item = (i: number) => ({
@@ -144,7 +148,11 @@ export function Hero({ ready }: { ready: boolean }) {
 
       {/* aşağı kaydırma ipucu */}
       <motion.div
-        className="absolute bottom-9 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
+        className="pointer-events-none absolute bottom-9 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
+        style={reduce ? undefined : { opacity: cueOpacity }}
+      >
+      <motion.div
+        className="flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
         animate={ready ? { opacity: 1 } : undefined}
         transition={{ delay: reduce ? 0 : 1, duration: 0.7 }}
@@ -156,6 +164,7 @@ export function Hero({ ready }: { ready: boolean }) {
           style={{ transformOrigin: "top" }}
           transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
         />
+      </motion.div>
       </motion.div>
     </section>
   );

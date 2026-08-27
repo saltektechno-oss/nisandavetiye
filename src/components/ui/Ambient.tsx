@@ -34,25 +34,25 @@ type Burst = {
 export function Ambient({ opened }: { opened: boolean }) {
   const motes = useMemo(() => {
     const rand = seeded(7);
-    return Array.from({ length: 22 }, () => ({
+    return Array.from({ length: 16 }, () => ({
       left: `${(rand() * 100).toFixed(2)}%`,
       size: +(2 + rand() * 2.5).toFixed(2),
       duration: +(16 + rand() * 18).toFixed(2),
       delay: +(-rand() * 26).toFixed(2),
       driftX: `${((rand() - 0.5) * 90).toFixed(1)}px`,
-      opacity: +(0.25 + rand() * 0.4).toFixed(2),
+      opacity: +(0.16 + rand() * 0.22).toFixed(2),
     }));
   }, []);
 
   const sparks = useMemo(() => {
     const rand = seeded(21);
-    return Array.from({ length: 18 }, () => ({
+    return Array.from({ length: 12 }, () => ({
       left: `${(rand() * 100).toFixed(2)}%`,
       top: `${(rand() * 100).toFixed(2)}%`,
-      size: +(6 + rand() * 12).toFixed(1),
+      size: +(5 + rand() * 8).toFixed(1),
       duration: +(3.4 + rand() * 4.2).toFixed(2),
       delay: +(-rand() * 7).toFixed(2),
-      peak: +(0.3 + rand() * 0.45).toFixed(2),
+      peak: +(0.14 + rand() * 0.24).toFixed(2),
     }));
   }, []);
 
