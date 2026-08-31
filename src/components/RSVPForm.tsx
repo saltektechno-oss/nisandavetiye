@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
-import { formspreeEndpoint } from "@/lib/site.config";
+import { submitRsvp } from "@/lib/rsvp";
 import { Reveal } from "./ui/Reveal";
 import { SectionLabel } from "./ui/SectionLabel";
 
@@ -39,33 +39,14 @@ export function RSVPForm() {
       setStatus("success");
       return;
     }
-    if (!formspreeEndpoint) {
-      setError(
-        "Form henüz bağlanmadı. .env.local dosyasına NEXT_PUBLIC_FORMSPREE_ENDPOINT eklenmeli.",
-      );
-      return;
-    }
-
     setStatus("sending");
     try {
-      const res = await fetch(formspreeEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          "Ad Soyad": name.trim(),
-          "Katılım": attendingYes ? "Katılacak" : "Katılamayacak",
-          "Kişi Sayısı": attendingYes ? guests : 0,
-          "Not": note.trim() || "—",
-          _subject: `Nişan RSVP — ${name.trim()} (${attendingYes ? "Katılacak" : "Katılamayacak"})`,
-        }),
+      await submitRsvp({
+        name: name.trim(),
+        attending: attendingYes,
+        guests: attendingYes ? guests : 0,
+        note: note.trim(),
       });
-
-      if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as
-          | { errors?: { message?: string }[] }
-          | null;
-        throw new Error(data?.errors?.[0]?.message ?? `Sunucu hatası (${res.status})`);
-      }
       setStatus("success");
     } catch (err) {
       setStatus("error");

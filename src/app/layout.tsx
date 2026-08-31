@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Amiri, Cormorant_Garamond, Jost } from "next/font/google";
 import { siteConfig, siteUrl } from "@/lib/site.config";
 import "./globals.css";
 
@@ -15,6 +15,14 @@ const jost = Jost({
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500"],
   variable: "--font-jost",
+  display: "swap",
+});
+
+/* Besmele hattı (U+FDFD) için — cihazda Arapça font olmasa da doğru çizilir */
+const amiri = Amiri({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  variable: "--font-amiri",
   display: "swap",
 });
 
@@ -50,7 +58,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="tr" className={`${cormorant.variable} ${jost.variable}`}>
+    <html lang="tr" className={`${cormorant.variable} ${jost.variable} ${amiri.variable}`}>
       <body className="paper antialiased">{children}</body>
     </html>
   );

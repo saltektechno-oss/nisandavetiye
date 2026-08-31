@@ -7,7 +7,7 @@ import { SectionLabel } from "./ui/SectionLabel";
 
 /** Mekân kartı: harita, adres ve yönlendirme butonları. */
 export function MapSection() {
-  const { venue, event } = siteConfig;
+  const { venue } = siteConfig;
 
   return (
     <section className="relative bg-parchment px-6 pb-20 sm:pb-24" id="mekan">
@@ -29,24 +29,15 @@ export function MapSection() {
             <span className="pointer-events-none absolute inset-0 border-b border-gold/25" />
           </div>
 
-          <div className="px-6 py-7 text-center sm:px-8 sm:py-8">
-            <p className="font-display text-[1.6rem] leading-tight text-ink sm:text-[1.8rem]">
+          <div className="px-5 py-6 text-center sm:px-8 sm:py-8">
+            <p className="font-display text-[1.5rem] leading-tight text-ink sm:text-[1.8rem]">
               {venue.name}
             </p>
 
-            <p className="mt-2.5 text-[1rem] leading-[1.7] text-muted">
-              {venue.addressLines.map((line, i) => (
-                <span key={i} className="block">
-                  {line}
-                </span>
-              ))}
-            </p>
+            {/* Adres ve tarih davetiye kartında zaten yazılı — burada
+                tekrarlanmaz, doğrudan aksiyona geçilir. */}
 
-            <p className="mt-4 font-label text-[0.66rem] tracking-[0.24em] text-gold-deep uppercase">
-              {event.dayLabel} &middot; {event.dateLabel} &middot; {event.timeLabel}
-            </p>
-
-            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
                 href={mapsDirectionsUrl}
                 target="_blank"

@@ -5,7 +5,6 @@ import { Countdown } from "@/components/Countdown";
 import { Cover } from "@/components/Cover";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
-import { InviteText } from "@/components/InviteText";
 import { MapSection } from "@/components/MapSection";
 import { MusicPlayer, type MusicHandle } from "@/components/MusicPlayer";
 import { Program } from "@/components/Program";
@@ -31,7 +30,6 @@ export default function Home() {
       <main>
         <Hero ready={opened} />
         <Countdown />
-        <InviteText />
         <Program />
         <MapSection />
         <RSVPForm />

@@ -19,6 +19,18 @@ const FADE_MS = 900;
  *  bağımsız olarak, kendi başına duyulur bir hedefte çalar. */
 const AMBIENT_VOLUME = 0.8;
 
+/** Parçayı seçilen giriş saniyesine sarar. Meta veri henüz gelmediyse
+ *  (currentTime yazılamaz) yükleme biter bitmez tekrar dener. */
+function seekToStart(audio: HTMLAudioElement) {
+  const at = siteConfig.music.startAt ?? 0;
+  if (at <= 0) return;
+  try {
+    audio.currentTime = at;
+  } catch {
+    audio.addEventListener("loadedmetadata", () => (audio.currentTime = at), { once: true });
+  }
+}
+
 export function MusicPlayer({
   visible,
   controls,
@@ -30,6 +42,9 @@ export function MusicPlayer({
 }) {
   const src = siteConfig.music.src;
   const targetVolume = siteConfig.music.volume;
+  /** Parçanın giriş noktası (saniye) — hem ilk çalışta hem de döngüde
+   *  buradan başlar, böylece uzun intro her turda tekrar dinlenmez. */
+  const startAt = siteConfig.music.startAt ?? 0;
   const reduce = useReducedMotion();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -64,6 +79,7 @@ export function MusicPlayer({
       const audio = audioRef.current;
       audio.volume = 0;
       try {
+        if (startAt > 0 && audio.currentTime < startAt) seekToStart(audio);
         await audio.play();
         usingAmbient.current = false;
         setPlaying(true);
@@ -80,7 +96,7 @@ export function MusicPlayer({
       usingAmbient.current = true;
       setPlaying(true);
     }
-  }, [src, targetVolume]);
+  }, [src, targetVolume, startAt]);
 
   function stop() {
     if (usingAmbient.current) {
@@ -100,7 +116,25 @@ export function MusicPlayer({
 
   return (
     <>
-      {src && <audio ref={audioRef} src={src} loop preload="none" />}
+      {src && (
+        <audio
+          ref={audioRef}
+          src={startAt > 0 ? `${src}#t=${startAt}` : src}
+          loop={startAt === 0}
+          preload="none"
+          /* Giriş noktası varsa döngüyü kendimiz kuruyoruz: parça bitince
+             baştan değil, seçilen saniyeden devam eder. */
+          onEnded={
+            startAt > 0
+              ? (e) => {
+                  const audio = e.currentTarget;
+                  seekToStart(audio);
+                  void audio.play().catch(() => {});
+                }
+              : undefined
+          }
+        />
+      )}
 
       <AnimatePresence>
         {visible && (
@@ -110,8 +144,14 @@ export function MusicPlayer({
             aria-label={playing ? "Müziği durdur" : "Müziği başlat"}
             aria-pressed={playing}
             title={siteConfig.music.title}
-            className="fixed right-5 bottom-5 z-40 flex h-13 w-13 items-center justify-center rounded-full border border-gold/60 bg-surface/95 backdrop-blur-sm sm:right-7 sm:bottom-7"
-            style={{ boxShadow: "0 10px 26px -10px rgba(59,49,42,0.45)", width: 54, height: 54 }}
+            className="fixed right-4 bottom-4 z-40 flex items-center justify-center rounded-full border border-gold/60 bg-surface/95 backdrop-blur-sm sm:right-7 sm:bottom-7"
+            style={{
+              boxShadow: "0 10px 26px -10px rgba(59,49,42,0.45)",
+              width: 52,
+              height: 52,
+              /* çentikli telefonlarda alt çubuğun üstünde kalsın */
+              marginBottom: "env(safe-area-inset-bottom, 0px)",
+            }}
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.7 }}
