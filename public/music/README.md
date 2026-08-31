@@ -3,12 +3,16 @@
 Site şu dosyayı bekliyor:
 
 ```
-public/music/the-vals.mp3
+public/music/to-vals-tou-gamou.mp3
 ```
 
-Parça ("The Vals") bu isimle buraya konduğu anda çalmaya başlar. Dosya yoksa
-site sessizce tarayıcıda üretilen yumuşak melodiye düşer — hiçbir zaman
-sessiz kalmaz, hata da vermez.
+Parça (**To Vals Tou Gamou** — Evanthia Reboutsika, *Bir Tutam Baharat*)
+bu isimle buraya konduğu anda çalmaya başlar. **Dosya adı birebir bu olmalı.**
+
+Dosya yoksa site sessizce tarayıcıda üretilen yumuşak melodiye düşer — hiçbir
+zaman sessiz kalmaz, hata da vermez. "Müzik değişmedi" diyorsan neredeyse her
+zaman sebep budur: dosya henüz bu klasörde değildir ya da adı farklıdır.
+Geliştirme modunda tarayıcı konsoluna `[müzik] … çalınamadı` uyarısı düşer.
 
 Farklı bir isim/parça kullanacaksan `src/lib/site.config.ts` içindeki
 `music.src` değerini güncelle. Müziği tamamen kapatmak için `src: null` yaz —
@@ -17,15 +21,15 @@ o zaman düğme hiç görünmez.
 ## Giriş noktası (`music.startAt`)
 
 `site.config.ts` → `music.startAt` parçanın kaçıncı saniyesinden başlayacağını
-söyler. Şu an **12. saniye** seçili: The Vals'ta ilk saniyeler sessiz/ritim
-girişidir, ana vals teması bu noktada girer — kapak açılır açılmaz melodi
-duyulsun diye. Parça döngüye girdiğinde de baştan değil, yine bu saniyeden
-devam eder.
+söyler. Şu an **0** (en baş) seçili: To Vals Tou Gamou zaten ilk notadan
+itibaren ana vals temasıyla, yumuşak bir girişle açılıyor — kapağa dokunulduğu
+an melodi duyuluyor, beklenecek bir intro yok. Parça döngüye girdiğinde de bu
+noktadan devam eder.
 
-- Başka bir yerden başlatmak için sayıyı değiştir (saniye cinsinden).
-- `startAt: 0` yazarsan parça en baştan çalar.
-- Parçayı değiştirirsen bu değeri de gözden geçir — 12. saniye yeni parçada
-  anlamlı olmayabilir.
+- Elindeki kayıtta uzun bir intro varsa (kimi sürümlerde var), temanın
+  girdiği saniyeyi yaz — örneğin `startAt: 8`.
+- Parçayı değiştirirsen bu değeri de gözden geçir.
+- Dosya verilen saniyeden kısaysa site kendiliğinden en baştan çalar.
 
 ## Öneriler
 

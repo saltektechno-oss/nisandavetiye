@@ -24,10 +24,14 @@ const AMBIENT_VOLUME = 0.8;
 function seekToStart(audio: HTMLAudioElement) {
   const at = siteConfig.music.startAt ?? 0;
   if (at <= 0) return;
+  /* Parça bu saniyeden kısaysa sarma; sessizlik yerine en baştan çalsın. */
+  const apply = () => {
+    if (!audio.duration || at < audio.duration) audio.currentTime = at;
+  };
   try {
-    audio.currentTime = at;
+    apply();
   } catch {
-    audio.addEventListener("loadedmetadata", () => (audio.currentTime = at), { once: true });
+    audio.addEventListener("loadedmetadata", apply, { once: true });
   }
 }
 
@@ -86,7 +90,15 @@ export function MusicPlayer({
         fadeAudioTo(targetVolume);
         return;
       } catch {
-        // Dosya yok/oynatılamadı — üretilen melodiye düş
+        /* Dosya yok/oynatılamadı — üretilen melodiye düşülür. En sık sebep,
+           dosyanın public/music altında bu adla bulunmaması; geliştirirken
+           sessizce yutmak yerine söyle. */
+        if (process.env.NODE_ENV === "development") {
+          console.warn(
+            `[müzik] "${src}" çalınamadı — dosya public${src} yolunda var mı? ` +
+              "Site şimdilik gömülü melodiye düştü.",
+          );
+        }
       }
     }
 

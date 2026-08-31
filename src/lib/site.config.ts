@@ -118,16 +118,17 @@ export const siteConfig = {
      Dosyayı /public/music/ içine koy ve adını buraya yaz.
      `src: null` yaparsan müzik butonu hiç görünmez.                       */
   music: {
-    src: "/music/the-vals.mp3" as string | null,
-    title: "The Vals",
+    src: "/music/to-vals-tou-gamou.mp3" as string | null,
+    title: "To Vals Tou Gamou",
     /** 0 ile 1 arası. 0.35 = kısık, arka plan hissi */
     volume: 0.35,
     /** Parçanın kaçıncı saniyesinden başlasın (giriş yeri).
-        The Vals'ta ilk saniyeler sessiz/ritim girişidir; ana yaylı-vals
-        teması bu noktada girer — kapak açılır açılmaz melodi duyulur.
-        Döngüde de baştan değil, bu noktadan devam eder.
-        Parçayı değiştirirsen bu değeri de güncelle; 0 = en baştan.       */
-    startAt: 12,
+        "To Vals Tou Gamou" ilk notadan itibaren ana vals temasıyla açılır —
+        yumuşak giriş zaten davetiyenin açılışına birebir oturuyor, bu yüzden
+        0 (en baş) seçildi. Başka bir yerden başlatmak istersen saniyeyi yaz;
+        parça döngüye girdiğinde de baştan değil buradan devam eder.
+        Dosya bu saniyeden kısaysa site kendiliğinden en başa döner.        */
+    startAt: 0,
   },
 
   /* --- KATILIM FORMU (Google Formlar) -------------------------------------
