@@ -150,12 +150,12 @@ export const siteConfig = {
      Boş bırakırsan form gönderim yapmaz, kullanıcıya açıklayıcı bir uyarı
      gösterir. İstersen aynı değerleri .env.local üzerinden de verebilirsin. */
   googleForm: {
-    formId: "TEST_ID",
+    formId: "",
     entries: {
-      name: "entry.111",
-      attending: "entry.222",
-      guests: "entry.333",
-      note: "entry.444",
+      name: "",      // örn: "entry.123456789"
+      attending: "", // örn: "entry.987654321"
+      guests: "",    // örn: "entry.456789123"
+      note: "",      // örn: "entry.321654987"
     },
     /** Formdaki çoktan seçmeli seçeneklerin BİREBİR metni */
     attendingLabels: {
