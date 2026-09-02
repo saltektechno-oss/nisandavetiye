@@ -8,7 +8,6 @@ import { Hero } from "@/components/Hero";
 import { MapSection } from "@/components/MapSection";
 import { MusicPlayer, type MusicHandle } from "@/components/MusicPlayer";
 import { Program } from "@/components/Program";
-import { RSVPForm } from "@/components/RSVPForm";
 import { Ambient } from "@/components/ui/Ambient";
 
 export default function Home() {
@@ -32,7 +31,6 @@ export default function Home() {
         <Countdown />
         <Program />
         <MapSection />
-        <RSVPForm />
       </main>
 
       <Footer />

@@ -50,7 +50,7 @@ export function Hero({ ready }: { ready: boolean }) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-10 pb-24 text-center sm:px-7 sm:pt-14 sm:pb-28"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pt-10 pb-32 text-center sm:px-7 sm:pt-14 sm:pb-36"
       style={{
         background:
           "radial-gradient(ellipse 120% 80% at 50% -10%, #f7efdf 0%, var(--color-ivory) 58%)",
@@ -163,10 +163,23 @@ export function Hero({ ready }: { ready: boolean }) {
         >
           {[bride, groom].map((family, i) => (
             <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
-              <span className="font-label text-[0.68rem] leading-[1.85] tracking-[0.16em] text-ink uppercase sm:text-[0.82rem] sm:tracking-[0.24em]">
-                {family.parents}
+              <span className="font-label text-[clamp(0.58rem,2.9vw,0.66rem)] leading-[1.85] tracking-[0.12em] text-ink uppercase sm:text-[0.82rem] sm:tracking-[0.24em]">
+                {family.parents.map((parent, j) => (
+                  <span key={parent.name}>
+                    {j > 0 && " & "}
+                    {/* "(merhum)" ile isim tek parça: aralarına satır sonu girmez */}
+                    <span className="whitespace-nowrap">
+                      {parent.late && (
+                        <span className="text-[0.82em] tracking-[0.06em] text-muted normal-case">
+                          (merhum){" "}
+                        </span>
+                      )}
+                      {parent.name}
+                    </span>
+                  </span>
+                ))}
               </span>
-              <span className="font-label text-[0.68rem] leading-[1.85] tracking-[0.16em] text-ink uppercase sm:text-[0.82rem] sm:tracking-[0.24em]">
+              <span className="font-label text-[clamp(0.58rem,2.9vw,0.66rem)] leading-[1.85] tracking-[0.12em] text-ink uppercase sm:text-[0.82rem] sm:tracking-[0.24em]">
                 {family.surname}
               </span>
             </div>
@@ -185,17 +198,23 @@ export function Hero({ ready }: { ready: boolean }) {
           {siteConfig.invitation.tagline}
         </motion.p>
 
-        {/* 10 — Tarih satırı: tarih | gün | saat */}
-        <motion.div {...item(9)} className="mt-6 flex items-center gap-3 sm:mt-8 sm:gap-5">
-          <span className="font-display text-[1.35rem] leading-none font-medium text-ink sm:text-[1.85rem]">
+        {/* 10 — Tarih: davetiyenin en çok okunan satırı. İnce serif ve geniş
+            harf aralığı yerine net bir grotesk (Montserrat) kullanılır;
+            gün ve saat de küçük etiket değil, okunur boyda yazılır. */}
+        <motion.div
+          {...item(9)}
+          className="mt-6 flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1.5 sm:mt-8 sm:gap-x-5"
+          style={{ fontFamily: "var(--font-ui)" }}
+        >
+          <span className="text-[1.15rem] leading-tight font-semibold tracking-[0.01em] text-ink sm:text-[1.35rem]">
             {siteConfig.event.dateLabel}
           </span>
-          <span className="h-6 w-px bg-gold/45" />
-          <span className="font-label text-[0.68rem] tracking-[0.28em] text-muted uppercase sm:text-[0.75rem]">
+          <span aria-hidden="true" className="h-5 w-px bg-gold/50" />
+          <span className="text-[1rem] leading-tight font-medium text-ink-soft sm:text-[1.1rem]">
             {siteConfig.event.dayLabel}
           </span>
-          <span className="h-6 w-px bg-gold/45" />
-          <span className="font-label text-[0.68rem] tracking-[0.28em] text-muted uppercase sm:text-[0.75rem]">
+          <span aria-hidden="true" className="h-5 w-px bg-gold/50" />
+          <span className="tabular text-[1rem] leading-tight font-medium text-ink-soft sm:text-[1.1rem]">
             {siteConfig.event.timeLabel}
           </span>
         </motion.div>
@@ -216,25 +235,50 @@ export function Hero({ ready }: { ready: boolean }) {
         </motion.address>
       </motion.div>
 
-      {/* aşağı kaydırma ipucu */}
+      {/* Aşağı kaydırma ipucu.
+          İnce çizgi + küçük harfli "KAYDIR" yerine, uzaktan da seçilen
+          bir düğme: yuvarlak ok + tam okunur bir cümle. Üstelik gerçekten
+          çalışır — dokunan kişi bir sonraki bölüme iner, kaydırmayı
+          bilmesi gerekmez. */}
       <motion.div
-        className="pointer-events-none absolute bottom-6 left-1/2 sm:bottom-9 flex -translate-x-1/2 flex-col items-center gap-2"
+        className="pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center sm:bottom-9"
         style={reduce ? undefined : { opacity: cueOpacity }}
       >
-        <motion.div
-          className="flex flex-col items-center gap-2"
+        <motion.button
+          type="button"
+          onClick={() =>
+            sectionRef.current?.nextElementSibling?.scrollIntoView({
+              behavior: reduce ? "auto" : "smooth",
+              block: "start",
+            })
+          }
+          className="pointer-events-auto flex flex-col items-center gap-2 rounded-2xl px-4 py-2"
           initial={{ opacity: 0 }}
           animate={ready ? { opacity: 1 } : undefined}
           transition={{ delay: reduce ? 0 : 1.2, duration: 0.7 }}
         >
-          <span className="label-caps text-[0.6rem] text-muted">Kaydır</span>
           <motion.span
-            className="block h-9 w-px bg-linear-to-b from-gold to-transparent"
-            animate={reduce ? undefined : { scaleY: [0.4, 1, 0.4], opacity: [0.4, 1, 0.4] }}
-            style={{ transformOrigin: "top" }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/60 bg-surface/90 text-gold-deep shadow-[0_8px_20px_-10px_rgba(59,49,42,0.45)]"
+            animate={reduce ? undefined : { y: [0, 6, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden="true">
+              <path
+                d="M12 5v13m0 0-6-6m6 6 6-6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.span>
+          <span
+            className="text-[0.95rem] leading-none font-medium text-ink-soft"
+            style={{ fontFamily: "var(--font-ui)" }}
+          >
+            Aşağı kaydırın
+          </span>
+        </motion.button>
       </motion.div>
     </section>
   );

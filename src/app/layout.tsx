@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Amiri, Cormorant_Garamond, Jost } from "next/font/google";
+import { Amiri, Cormorant_Garamond, Jost, Montserrat } from "next/font/google";
 import { siteConfig, siteUrl } from "@/lib/site.config";
 import "./globals.css";
 
@@ -15,6 +15,15 @@ const jost = Jost({
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500"],
   variable: "--font-jost",
+  display: "swap",
+});
+
+/* Tarih ve yönlendirme yazıları — uzaktan/ileri yaşta rahat okunsun diye
+   ince serif yerine net, geniş gövdeli bir grotesk */
+const montserrat = Montserrat({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 
@@ -58,7 +67,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="tr" className={`${cormorant.variable} ${jost.variable} ${amiri.variable}`}>
+    <html lang="tr" className={`${cormorant.variable} ${jost.variable} ${montserrat.variable} ${amiri.variable}`}>
       <body className="paper antialiased">{children}</body>
     </html>
   );

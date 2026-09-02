@@ -1,12 +1,12 @@
 # Kevser & Tahir — Dijital Nişan Davetiyesi
 
 Tek sayfalık, mobil öncelikli, klasik ve romantik bir nişan davetiyesi sitesi.
-Davetiye kapağı animasyonu, canlı geri sayım, gecenin akışı, harita, RSVP
-formu, arka plan müziği ve basılı davetiyeye eklenecek QR kod üreteci içerir.
+Davetiye kapağı animasyonu, canlı geri sayım, gecenin akışı, harita,
+arka plan müziği ve basılı davetiyeye eklenecek QR kod üreteci içerir.
 Fotoğraf kullanmaz — tüm görseller kodla çizilir.
 
 **Teknolojiler:** Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 ·
-Framer Motion · Formspree · Netlify
+Framer Motion · Netlify
 
 ---
 
@@ -90,36 +90,8 @@ düğmeden istediğin an kapatıp açabilirsin.
 
 ---
 
-## 4. RSVP Formu (Formspree)
 
-Form, sunucu gerektirmeden doğrudan Formspree'ye gönderilir; cevaplar
-e‑postana düşer.
-
-1. <https://formspree.io> adresinde ücretsiz hesap aç.
-2. **New Form** → forma bir isim ver (örn. "Nişan RSVP").
-3. Sana verdiği adresi kopyala (`https://formspree.io/f/xxxxxxxx`).
-4. `.env.local` dosyasına yapıştır:
-
-   ```bash
-   NEXT_PUBLIC_FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxxxxx
-   ```
-
-5. Netlify'a yüklerken **aynı değişkeni Netlify panelinde de tanımla**
-   (Site settings → Environment variables). Aksi halde canlı sitede form
-   çalışmaz.
-
-> İlk gönderimden sonra Formspree bir doğrulama e‑postası yollar; onaylamadan
-> cevaplar gelmez. Yayına almadan önce formu bir kez kendin doldur.
-
-Forma gelen alanlar: Ad Soyad · Katılım · Kişi Sayısı · Not.
-Formda görünmeyen bir bot tuzağı (`_gotcha`) da var — spam'i azaltır.
-
-Ücretsiz plan aylık 50 gönderim verir; daha fazlası gerekirse Formspree'de
-plan yükseltmen gerekir.
-
----
-
-## 5. QR Kod
+## 4. QR Kod
 
 `/qr` adresinde ayrı bir sayfa var (arama motorlarına kapalı, davetliler
 görmez).
@@ -136,7 +108,7 @@ lekelerde bile okunur. Davetiye kartında **en az 2×2 cm** basmanı öneririm.
 
 ---
 
-## 6. Netlify'a Deploy
+## 5. Netlify'a Deploy
 
 ### Yol A — GitHub üzerinden (önerilen)
 
@@ -145,7 +117,6 @@ lekelerde bile okunur. Davetiye kartında **en az 2×2 cm** basmanı öneririm.
 3. Repoyu seç. Netlify Next.js'i tanır ve ayarları kendi doldurur
    (`netlify.toml` zaten repoda).
 4. **Environment variables** bölümüne ekle:
-   - `NEXT_PUBLIC_FORMSPREE_ENDPOINT`
    - `NEXT_PUBLIC_SITE_URL`
 5. **Deploy site**. Bundan sonra her `git push` otomatik yayına alır.
 
@@ -166,7 +137,7 @@ QR kodu yeniden üretmeyi unutma.
 
 ---
 
-## 7. Proje Yapısı
+## 6. Proje Yapısı
 
 ```
 src/
@@ -182,7 +153,6 @@ src/
     InviteText.tsx      Aileleri tanıtan davet metni
     Program.tsx         Gecenin akışı
     MapSection.tsx      Harita, yol tarifi, takvime ekle
-    RSVPForm.tsx        Katılım formu (Formspree)
     MusicPlayer.tsx     Müzik aç/kapa düğmesi
     Footer.tsx          Kapanış
     QRSection.tsx       QR üretici
@@ -197,7 +167,7 @@ public/
 
 ---
 
-## 8. Tasarım Notları
+## 7. Tasarım Notları
 
 **Renkler** — `src/app/globals.css` içindeki `@theme` bloğunda tanımlı. Bir
 rengi değiştirmen tüm siteye yansır.
@@ -224,7 +194,7 @@ animasyonlar kapanır.
 
 ---
 
-## 9. Sık Karşılaşılan Durumlar
+## 8. Sık Karşılaşılan Durumlar
 
 **Geri sayım "––" gösteriyor** — Normal; sayaç yalnızca tarayıcıda çalışır,
 sayfa yüklenir yüklenmez gerçek değerler gelir.
@@ -232,10 +202,6 @@ sayfa yüklenir yüklenmez gerçek değerler gelir.
 **Harita boş / gri görünüyor** — İnternet bağlantısını kontrol et. Adres
 `site.config.ts` içindeki `venue.mapsQuery` alanından üretilir; salonu Google
 Haritalar'da aratıp tam olarak orada göründüğü şekilde yaz.
-
-**Form gönderilmiyor** — `NEXT_PUBLIC_FORMSPREE_ENDPOINT` tanımlı mı? Netlify'a
-da eklendi mi? Ortam değişkenini değiştirdikten sonra siteyi yeniden deploy
-etmen gerekir.
 
 **Müzik çalmıyor** — Dosya eklemesen de site üretilen bir melodi çalar; hiç
 ses gelmiyorsa telefon sessiz moddadır (bu iOS'ta tarayıcı seslerini de

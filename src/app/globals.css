@@ -30,6 +30,7 @@
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-body: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-label: var(--font-jost), "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-ui: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-arabic: var(--font-amiri), "Amiri", "Noto Naskh Arabic", "Traditional Arabic", serif;
 
   /* Yumuşak gölgeler */

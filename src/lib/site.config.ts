@@ -6,6 +6,9 @@
    Kod dosyalarına dokunmana gerek yok.
    =========================================================================== */
 
+/** Davetiyede adı geçen bir ebeveyn. `late: true` → adının önüne "(merhum)". */
+export type Parent = { name: string; late?: boolean };
+
 export const siteConfig = {
   /* --- ÇİFT ------------------------------------------------------------- */
   couple: {
@@ -54,10 +57,19 @@ export const siteConfig = {
     label: "Bismillâhirrahmânirrahîm",
   },
 
-  /* --- AİLELER (davetiyedeki iki sütun) ----------------------------------- */
+  /* --- AİLELER (davetiyedeki iki sütun) -----------------------------------
+     Her ebeveyn ayrı bir kayıt. `late: true` verilen isim, adının hemen
+     önünde küçük puntolu "(merhum)" ile yazılır; ikisi tek parça gibi
+     davranır, araya satır sonu girmez.                                    */
   families: {
-    bride: { parents: "Naime & Vedat", surname: "Saltek" },
-    groom: { parents: "Nagihan & Erdem", surname: "Çebi" },
+    bride: {
+      parents: [{ name: "Naime" }, { name: "Vedat", late: true }] as Parent[],
+      surname: "Saltek",
+    },
+    groom: {
+      parents: [{ name: "Nagihan" }, { name: "Erdem" }] as Parent[],
+      surname: "Çebi",
+    },
   },
 
   /* --- AÇILIŞ SÖZÜ (Hero) ----------------------------------------------- */
@@ -87,9 +99,9 @@ export const siteConfig = {
      Gerekmiyorsa diziyi boşalt (`items: []`) — bölüm otomatik gizlenir.   */
   program: {
     items: [
-      { time: "19.00", title: "Karşılama", note: "İkram ve tatlılar" },
-      { time: "20.00", title: "Nişan Merasimi", note: "Yüzük takma töreni" },
-      { time: "21.00", title: "Müzik & Dans", note: "" },
+      { time: "18.00", title: "Karşılama", note: "İkram ve tatlılar" },
+      { time: "19.00", title: "Nişan Merasimi", note: "Yüzük takma töreni" },
+      { time: "20.00", title: "Müzik & Dans", note: "" },
     ],
   },
 
@@ -131,40 +143,6 @@ export const siteConfig = {
     startAt: 0,
   },
 
-  /* --- KATILIM FORMU (Google Formlar) -------------------------------------
-     Cevaplar doğrudan kendi Google Formuna, oradan da Google E-Tablolar'a
-     düşer. Kurulum 2 dakika — adım adım anlatım: KATILIM-FORMU.md
-
-     Kısaca:
-       1. forms.google.com'da 4 soruluk bir form aç:
-          Ad Soyad (kısa yanıt) · Katılım (çoktan seçmeli) ·
-          Kişi Sayısı (kısa yanıt) · Not (paragraf)
-       2. Formu "Bağlantıyı al" ile aç. Adres şuna benzer:
-          https://docs.google.com/forms/d/e/1FAIpQLSxxxxxxxx/viewform
-          Aradaki "1FAIpQLSxxxxxxxx" kısmı `formId`.
-       3. Aynı sayfada sağ tık → "Sayfa kaynağını görüntüle" → "entry."
-          diye ara. Her soru için "entry.123456789" bulacaksın; sırasıyla
-          aşağıya yaz.
-       4. "Katılım" sorusundaki iki seçeneğin metnini `attendingLabels`a
-          birebir yaz (harfi harfine aynı olmalı, yoksa Google reddeder).
-
-     Boş bırakırsan form gönderim yapmaz, kullanıcıya açıklayıcı bir uyarı
-     gösterir. İstersen aynı değerleri .env.local üzerinden de verebilirsin. */
-  googleForm: {
-    formId: "",
-    entries: {
-      name: "",      // örn: "entry.123456789"
-      attending: "", // örn: "entry.987654321"
-      guests: "",    // örn: "entry.456789123"
-      note: "",      // örn: "entry.321654987"
-    },
-    /** Formdaki çoktan seçmeli seçeneklerin BİREBİR metni */
-    attendingLabels: {
-      yes: "Katılacağım",
-      no: "Katılamayacağım",
-    },
-  },
-
   /* --- FOOTER ------------------------------------------------------------ */
   footer: {
     closing: "Sevgiyle hazırlandı",
@@ -182,19 +160,6 @@ export const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destina
 export const mapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(
   siteConfig.venue.mapsQuery,
 )}&output=embed&hl=tr&z=16`;
-
-/** Google Form kimliği — .env.local varsa oradan, yoksa yukarıdan okunur */
-export const googleFormId =
-  process.env.NEXT_PUBLIC_GOOGLE_FORM_ID?.trim() || siteConfig.googleForm.formId.trim();
-
-/** Cevapların POST edileceği adres (formun kendi "formResponse" ucu) */
-export const googleFormEndpoint = googleFormId
-  ? `https://docs.google.com/forms/d/e/${googleFormId}/formResponse`
-  : "";
-
-/** Formspree adresi — .env.local dosyasından okunur (Google Form yoksa yedek) */
-export const formspreeEndpoint =
-  process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT?.trim() || "";
 
 /** QR kodun işaret edeceği canlı adres */
 export const siteUrl =
